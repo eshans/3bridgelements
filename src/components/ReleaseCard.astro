@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import type { Release } from '../data/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  release: Release;
+  delay?: number;
+  eager?: boolean;
+}
+
+const { release, delay = 0, eager = false } = Astro.props;
+---
+
+<article data-reveal style={`--d:${delay}ms`}>
+  <a
+    href={release.href}
+    target="_blank"
+    rel="noopener"
+    class="group block"
+    aria-label={`${release.title}${release.artist ? ` by ${release.artist}` : ''}, on ${release.store} (opens in new tab)`}
+  >
+    <div class="relative aspect-square overflow-hidden rounded-sm bg-white/5 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/10">
+      <Image
+        src={release.cover}
+        alt=""
+        widths={[240, 360, 500]}
+        sizes="(min-width: 1024px) 22vw, (min-width: 640px) 30vw, 46vw"
+        loading={eager ? 'eager' : 'lazy'}
+        class="h-full w-full object-cover transition-transform duration-[1200ms] ease-[var(--ease-out-expo)] group-hover:scale-[1.06]"
+      />
+      <div
+        class="absolute inset-0 flex items-end justify-between bg-gradient-to-t from-black/75 via-black/10 to-transparent p-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
+      >
+        <span class="text-[0.68rem] font-medium tracking-[0.24em] text-white uppercase">{release.store}</span>
+        <span class="grid size-9 place-items-center rounded-full bg-white text-ink">
+          <Icon icon="arrow" class="size-4" />
+        </span>
+      </div>
+    </div>
+    <div class="mt-4 space-y-1">
+      <p class="font-mono text-[0.65rem] tracking-[0.2em] text-white/35">{release.catalog}</p>
+      <h3 class="text-[0.95rem] leading-snug font-medium text-white transition-colors group-hover:text-mist">
+        {release.title}
+      </h3>
+      {release.artist && <p class="text-sm text-white/50">{release.artist}</p>}
+    </div>
+  </a>
+</article>

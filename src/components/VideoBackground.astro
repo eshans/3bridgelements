@@ -1,0 +1,68 @@
+---
+interface Props {
+  src: string;
+  /** 0–1, how much to darken the video so text stays readable */
+  dim?: number;
+}
+
+const { src, dim = 0.45 } = Astro.props;
+---
+
+<div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-ink" aria-hidden="true">
+  <div data-parallax class="absolute -inset-8 will-change-transform">
+    <video
+      data-bg-video
+      class="h-full w-full object-cover opacity-0 transition-opacity duration-[2000ms] ease-out motion-safe:animate-[drift_40s_ease-in-out_infinite_alternate]"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      disablepictureinpicture
+      src={src}
+    ></video>
+  </div>
+  <div class="absolute inset-0 bg-ink" style={`opacity:${dim}`}></div>
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,var(--color-ink)_100%)] opacity-80"></div>
+  <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink to-transparent"></div>
+</div>
+
+<script>
+  const video = document.querySelector<HTMLVideoElement>('[data-bg-video]');
+  const layer = document.querySelector<HTMLElement>('[data-parallax]');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (video) {
+    const show = () => video.classList.replace('opacity-0', 'opacity-100');
+    if (video.readyState >= 3) show();
+    else video.addEventListener('canplay', show, { once: true });
+
+    if (reduceMotion) {
+      video.removeAttribute('autoplay');
+      video.pause();
+    }
+  }
+
+  // Gentle pointer parallax on devices with a fine pointer
+  if (layer && !reduceMotion && window.matchMedia('(pointer: fine)').matches) {
+    let tx = 0, ty = 0, x = 0, y = 0, raf = 0;
+    const strength = 18;
+
+    const tick = () => {
+      x += (tx - x) * 0.06;
+      y += (ty - y) * 0.06;
+      layer.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      raf = Math.abs(tx - x) > 0.05 || Math.abs(ty - y) > 0.05 ? requestAnimationFrame(tick) : 0;
+    };
+
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        tx = -(e.clientX / window.innerWidth - 0.5) * strength;
+        ty = -(e.clientY / window.innerHeight - 0.5) * strength;
+        if (!raf) raf = requestAnimationFrame(tick);
+      },
+      { passive: true },
+    );
+  }
+</script>

@@ -1,0 +1,20 @@
+# Custom 404
+ErrorDocument 404 /404.html
+
+# Keep links to the old site working
+RewriteEngine On
+RewriteCond %{THE_REQUEST} \s/+index\.html[\s?]
+RewriteRule ^index\.html$ / [R=301,L]
+RewriteRule ^(artists|releases|contact)\.html$ /$1/ [R=301,L]
+
+# Long-lived caching for fingerprinted assets and media
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType video/mp4 "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>

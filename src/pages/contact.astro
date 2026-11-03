@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import Icon from '../components/Icon.astro';
+import { site, socials } from '../data/site';
+---
+
+<Layout title="Contact" video="/video/mountain.mp4" dim={0.5}>
+  <PageHeading eyebrow="Contact" title="Get in touch">
+    <p>Demos, licensing, press or just saying hello. Follow us on SoundCloud, listen on Spotify, and buy from all major retailers.</p>
+  </PageHeading>
+
+  <section class="mx-auto max-w-7xl px-4 pb-32 sm:px-8">
+    <a
+      href={`mailto:${site.email}?subject=Inquiry`}
+      class="group glass mb-16 flex flex-col gap-6 rounded-2xl p-8 transition hover:bg-white/[0.08] sm:flex-row sm:items-center sm:justify-between sm:p-12"
+      data-reveal
+    >
+      <div>
+        <p class="eyebrow mb-4">Email</p>
+        <p class="display text-[1.6rem] leading-tight sm:text-4xl lg:text-5xl">
+          {site.email.split('@')[0]}<wbr />@{site.email.split('@')[1]}
+        </p>
+      </div>
+      <span class="grid size-14 shrink-0 place-items-center rounded-full bg-white text-ink transition-transform duration-500 group-hover:rotate-45">
+        <Icon icon="arrow" class="size-6" />
+      </span>
+    </a>
+
+    <p class="eyebrow mb-6" data-reveal>Elsewhere</p>
+    <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        socials.map((s, i) => (
+          <li data-reveal style={`--d:${(i % 3) * 80}ms`}>
+            <a
+              href={s.href}
+              target="_blank"
+              rel="noopener"
+              class="group flex h-full items-center gap-5 rounded-2xl border border-white/10 bg-ink/70 p-6 backdrop-blur-xl transition hover:border-white/25 hover:bg-ink/40 sm:p-7"
+            >
+              <span class="grid size-12 shrink-0 place-items-center rounded-full border border-white/15 text-white/80 transition group-hover:border-white/40 group-hover:text-white">
+                <Icon icon={s.icon} class="size-5" />
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block font-medium text-white">{s.name}</span>
+                <span class="block truncate text-sm text-white/45">{s.handle}</span>
+              </span>
+              <Icon icon="arrow" class="size-5 text-white/30 transition group-hover:rotate-45 group-hover:text-white" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Layout>

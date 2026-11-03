@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Lost" video="/video/fog.mp4" dim={0.55}>
+  <section class="grid min-h-[80svh] place-items-center px-4 text-center">
+    <div>
+      <p class="eyebrow mb-6" data-reveal>404</p>
+      <h1 class="display text-5xl sm:text-7xl" data-reveal style="--d:120ms">Lost in the fog</h1>
+      <p class="mt-6 text-white/60" data-reveal style="--d:240ms">That page drifted off somewhere.</p>
+      <a
+        href="/"
+        class="mt-10 inline-block rounded-full bg-white px-6 py-3 text-sm font-medium text-ink transition hover:bg-mist"
+        data-reveal
+        style="--d:360ms">Back home</a
+      >
+    </div>
+  </section>
+</Layout>
