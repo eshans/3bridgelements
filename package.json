@@ -8,7 +8,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "deploy": "bash scripts/deploy.sh"
+    "deploy": "bash scripts/deploy.sh",
+    "zip": "npm run build && rm -f 3bridgelements-site.zip && cd dist && zip -rq -X ../3bridgelements-site.zip . -x '.DS_Store' && cd .. && echo 'Created 3bridgelements-site.zip' && ls -lh 3bridgelements-site.zip"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.3.0",

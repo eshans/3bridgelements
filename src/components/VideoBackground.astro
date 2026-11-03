@@ -1,26 +1,35 @@
 ---
 interface Props {
-  src: string;
+  /** Clip name in public/video: NAME.mp4 (1080p), NAME-720.mp4 (mobile), NAME.jpg (poster) */
+  name: string;
   /** 0–1, how much to darken the video so text stays readable */
   dim?: number;
 }
 
-const { src, dim = 0.45 } = Astro.props;
+const { name, dim = 0.45 } = Astro.props;
+const base = `/video/${name}`;
 ---
 
 <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-ink" aria-hidden="true">
   <div data-parallax class="absolute -inset-8 will-change-transform">
-    <video
-      data-bg-video
-      class="h-full w-full object-cover opacity-0 transition-opacity duration-[2000ms] ease-out motion-safe:animate-[drift_40s_ease-in-out_infinite_alternate]"
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="auto"
-      disablepictureinpicture
-      src={src}
-    ></video>
+    <div
+      class="h-full w-full bg-cover bg-center motion-safe:animate-[drift_40s_ease-in-out_infinite_alternate]"
+      style={`background-image:url(${base}.jpg)`}
+    >
+      <video
+        data-bg-video
+        class="h-full w-full object-cover opacity-0 transition-opacity duration-[2000ms] ease-out"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        disablepictureinpicture
+      >
+        <source src={`${base}-720.mp4`} type="video/mp4" media="(max-width: 900px)" />
+        <source src={`${base}.mp4`} type="video/mp4" />
+      </video>
+    </div>
   </div>
   <div class="absolute inset-0 bg-ink" style={`opacity:${dim}`}></div>
   <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,var(--color-ink)_100%)] opacity-80"></div>
